@@ -224,7 +224,11 @@ enum StatusIconRenderer {
                 foreground: foreground
             )
         }
-        drawVolume(menuBarStatus.volume, in: context, foreground: foreground)
+        if let indicator = menuBarStatus.codexIndicator {
+            drawDots(level: indicator.dotCount, in: context, foreground: foreground)
+        } else {
+            drawVolume(menuBarStatus.volume, in: context, foreground: foreground)
+        }
     }
 
     private static func drawBattery(
@@ -536,19 +540,25 @@ enum StatusIconRenderer {
         foreground: CGColor
     ) {
         let level = StatusMappings.volumeSteps(scalar: volume.scalar, isMuted: volume.isMuted) ?? 0
+        drawDots(level: level, in: context, foreground: foreground)
+    }
+
+    private static func drawDots(level: Int?, in context: CGContext, foreground: CGColor) {
         let hiddenColor = foreground.copy(alpha: inactiveTrackAlpha) ?? foreground
 
+        // Hollow circles mean unknown; zero quota uses the normal dim, filled tracks.
         for (index, point) in StatusIconGeometry.volumeDots().enumerated() {
-            context.setFillColor(index < level ? foreground : hiddenColor)
+            context.setFillColor(index < (level ?? 0) ? foreground : hiddenColor)
             let radius = StatusIconGeometry.volumeDotRadius
-            context.fillEllipse(
-                in: CGRect(
-                    x: point.x - radius,
-                    y: point.y - radius,
-                    width: radius * 2,
-                    height: radius * 2
-                )
-            )
+            let rect = CGRect(x: point.x - radius, y: point.y - radius,
+                              width: radius * 2, height: radius * 2)
+            if level == nil {
+                context.setStrokeColor(foreground)
+                context.setLineWidth(1.5)
+                context.strokeEllipse(in: rect.insetBy(dx: 0.75, dy: 0.75))
+            } else {
+                context.fillEllipse(in: rect)
+            }
         }
     }
 }

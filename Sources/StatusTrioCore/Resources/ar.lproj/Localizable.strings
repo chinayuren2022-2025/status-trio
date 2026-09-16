@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "قواعد العرض";
 "settings.audio.activeDeviceFootnote" = "يتم تمييز جهاز إخراج الصوت النشط بلون التمييز.";
 "settings.audio.inUse" = "قيد الاستخدام";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "مستوى الصوت";
+"codex.codexSession" = "Codex · 5 ساعات";
+"codex.codexWeekly" = "Codex · أسبوعي";
+"codex.codexIndicator" = "النقاط السفلية";
+"codex.codexTitle" = "الحصة المتبقية في Codex";
+"codex.codexRefresh" = "تحديث الحصة";
+"codex.codexUpdated" = "آخر تحديث";
+"codex.codexResets" = "إعادة التعيين";
+"codex.codexRemaining" = "متبقٍ %d%%";
+"codex.codexUnknown" = "غير متاح أو قديم";
+"codex.codexLoading" = "جارٍ تحميل الحصة…";
+"codex.codexSignIn" = "سجّل الدخول مجددًا عبر Codex CLI (codex login). يلزم ملف ChatGPT auth.json محلي.";
+"codex.codexNetworkError" = "تعذر التحديث. تحقق من الاتصال وحاول مجددًا.";
+"codex.codexUnsupported" = "لا يوفر هذا الحساب فترات حصة مدعومة.";
+"codex.codexAccountChanged" = "تغير حساب Codex. حدّث البيانات.";
+"codex.codexHint" = "اختياري: يقرأ تسجيل الدخول المحلي إلى Codex (CODEX_HOME/auth.json أو ~/.codex/auth.json) ويرسل الرمز إلى chatgpt.com فقط للتحقق من الحصة كل دقيقة. لا تُحفظ بيانات الاعتماد ولا تُعدّل. النقاط الفارغة تعني حالة غير معروفة؛ والمزيد من النقاط المضيئة يعني حصة متبقية أكبر.";

@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "Правила отображения";
 "settings.audio.activeDeviceFootnote" = "Активное устройство вывода звука выделяется цветом темы.";
 "settings.audio.inUse" = "Используется";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "Громкость";
+"codex.codexSession" = "Codex · 5 часов";
+"codex.codexWeekly" = "Codex · Неделя";
+"codex.codexIndicator" = "Нижние точки";
+"codex.codexTitle" = "Остаток лимита Codex";
+"codex.codexRefresh" = "Обновить лимит";
+"codex.codexUpdated" = "Обновлено";
+"codex.codexResets" = "Сброс";
+"codex.codexRemaining" = "Осталось %d%%";
+"codex.codexUnknown" = "Недоступно или устарело";
+"codex.codexLoading" = "Загрузка лимита…";
+"codex.codexSignIn" = "Войдите снова через Codex CLI (codex login). Нужен локальный файл ChatGPT auth.json.";
+"codex.codexNetworkError" = "Не удалось обновить. Проверьте подключение и повторите попытку.";
+"codex.codexUnsupported" = "У этой учётной записи нет поддерживаемых периодов лимита.";
+"codex.codexAccountChanged" = "Учётная запись Codex изменилась. Обновите данные.";
+"codex.codexHint" = "Необязательно: читает локальные данные входа Codex (CODEX_HOME/auth.json или ~/.codex/auth.json) и отправляет токен только на chatgpt.com для проверки лимита раз в минуту. Данные входа не сохраняются и не изменяются. Пустые точки означают неизвестный статус; чем больше ярких точек, тем больше остаток.";

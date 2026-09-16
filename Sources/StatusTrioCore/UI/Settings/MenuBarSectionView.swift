@@ -16,6 +16,7 @@ struct MenuBarSectionView: View {
 
             // 2. Icon Sizing
             iconSizeGroup
+            codexIndicatorGroup
 
             // 3. Battery Indicators
             batteryGroup
@@ -75,13 +76,10 @@ struct MenuBarSectionView: View {
                     Spacer()
 
                     // Real-size live icon directly on menu bar (no artificial background box)
-                    Image(nsImage: StatusIconRenderer.image(
-                        menuBarStatus: MenuBarStatus(snapshot: statusStore.snapshot),
-                        size: store.iconSize,
-                        options: store.batteryIconOptions,
-                        connectionOptions: store.connectionIconOptions,
-                        appearance: NSAppearance(named: isDarkPreview ? .darkAqua : .aqua)
-                    ))
+                    CodexIconPreview(
+                        monitor: statusStore.codexQuota, settings: store,
+                        snapshot: statusStore.snapshot, isDark: isDarkPreview
+                    )
                     .accessibilityHidden(true)
                     .animation(.easeInOut(duration: 0.15), value: store.iconSize)
                     .animation(.easeInOut(duration: 0.15), value: store.batteryIconOptions)
@@ -125,6 +123,25 @@ struct MenuBarSectionView: View {
             Text(localization.string(.settingsPreviewHint))
                 .font(.system(size: 11))
                 .foregroundStyle(.tertiary)
+        }
+    }
+
+    private var codexIndicatorGroup: some View {
+        SettingsGroup(localization.string(.codexIndicator), footnote: localization.string(.codexHint)) {
+            SettingsRow("circle.grid.2x2", tint: .teal, title: localization.string(.codexIndicator)) {
+                Picker(localization.string(.codexIndicator), selection: $store.bottomIndicatorMode) {
+                    ForEach(BottomIndicatorMode.allCases) { mode in
+                        Text(localization.string(mode.titleKey)).tag(mode)
+                    }
+                }
+                .labelsHidden()
+                .frame(width: 170)
+            }
+            if store.bottomIndicatorMode != .volume {
+                SettingsDivider()
+                CodexQuotaView(monitor: statusStore.codexQuota)
+                    .padding(14)
+            }
         }
     }
 

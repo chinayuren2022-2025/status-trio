@@ -169,3 +169,7 @@ Website: [https://statustrio.lingai.net/](https://statustrio.lingai.net/)
    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=lingyired/status-trio&type=date&legend=top-left" />
  </picture>
 </a>
+
+## Optional Codex quota dots
+
+In Settings → Menu Bar → Bottom dots, choose Codex 5-hour or weekly remaining usage instead of volume. This opt-in feature uses a local Codex ChatGPT login; see [setup, privacy, and limitations](docs/codex-quota.md).

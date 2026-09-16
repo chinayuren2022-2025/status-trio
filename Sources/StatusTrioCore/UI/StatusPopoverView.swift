@@ -42,10 +42,17 @@ enum StatusPresentation {
         let networkSummary = status.connection == .ethernet
             ? localization.string(.ethernetAccessibilityConnected)
             : wifiAccessibilitySummary(status.wifi, localization: localization)
-        let volumeSummary = localization.format(
-            .accessibilityVolume,
-            volumeValue(status.volume, localization: localization)
-        )
+        let volumeSummary: String
+        if let indicator = status.codexIndicator {
+            let value = indicator.remainingPercent.map { localization.format(.codexRemaining, Int($0.rounded())) }
+                ?? localization.string(.codexUnknown)
+            volumeSummary = localization.format(.commonLabelValue, localization.string(indicator.mode.titleKey), value)
+        } else {
+            volumeSummary = localization.format(
+                .accessibilityVolume,
+                volumeValue(status.volume, localization: localization)
+            )
+        }
 
         return localization.format(
             .accessibilityStatus,
@@ -297,6 +304,10 @@ struct StatusPopoverView: View {
 
     private var summary: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if settings.bottomIndicatorMode != .volume {
+                CodexQuotaView(monitor: store.codexQuota)
+                Divider()
+            }
             ForEach(settings.visiblePopupSections) { section in
                 popupSection(section)
 

@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "Anzeigeregeln";
 "settings.audio.activeDeviceFootnote" = "Das aktive Audioausgabegerät wird in der Akzentfarbe hervorgehoben.";
 "settings.audio.inUse" = "In Verwendung";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "Lautstärke";
+"codex.codexSession" = "Codex · 5 Stunden";
+"codex.codexWeekly" = "Codex · Wöchentlich";
+"codex.codexIndicator" = "Untere Punkte";
+"codex.codexTitle" = "Codex-Restkontingent";
+"codex.codexRefresh" = "Kontingent aktualisieren";
+"codex.codexUpdated" = "Aktualisiert";
+"codex.codexResets" = "Zurücksetzung";
+"codex.codexRemaining" = "%d%% verbleibend";
+"codex.codexUnknown" = "Nicht verfügbar oder veraltet";
+"codex.codexLoading" = "Kontingent wird geladen…";
+"codex.codexSignIn" = "Erneut über Codex CLI (codex login) anmelden. Eine lokale ChatGPT-auth.json ist erforderlich.";
+"codex.codexNetworkError" = "Aktualisierung fehlgeschlagen. Verbindung prüfen und erneut versuchen.";
+"codex.codexUnsupported" = "Dieses Konto liefert keine unterstützten Kontingentfenster.";
+"codex.codexAccountChanged" = "Codex-Konto geändert. Bitte aktualisieren.";
+"codex.codexHint" = "Optional: Liest die lokale Codex-Anmeldung (CODEX_HOME/auth.json oder ~/.codex/auth.json) und sendet das Token nur an chatgpt.com, um das Kontingent jede Minute abzurufen. Zugangsdaten werden weder gespeichert noch geändert. Hohle Punkte bedeuten unbekannt; mehr helle Punkte bedeuten mehr Restkontingent.";

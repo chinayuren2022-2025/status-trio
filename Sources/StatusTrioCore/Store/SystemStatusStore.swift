@@ -9,6 +9,7 @@ final class SystemStatusStore: ObservableObject {
     @Published private(set) var snapshot: StatusSnapshot
     @Published private(set) var popupSnapshot: StatusSnapshot
     @Published private(set) var liveVolume: VolumeStatus
+    let codexQuota = CodexQuotaMonitor()
     let wifiNetworks: WiFiNetworkController
     let bluetoothDevices: BluetoothDeviceController
 
@@ -155,6 +156,7 @@ final class SystemStatusStore: ObservableObject {
             self.wakeObserver = nil
         }
 
+        codexQuota.stop()
         batteryMonitor.stop()
         wifiMonitor.stop()
         connectionMonitor?.stop()

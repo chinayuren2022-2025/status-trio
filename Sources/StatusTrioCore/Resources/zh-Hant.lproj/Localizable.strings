@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "顯示規則";
 "settings.audio.activeDeviceFootnote" = "目前活躍的音訊輸出裝置將優先以主題色強調顯示。";
 "settings.audio.inUse" = "使用中";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "音量";
+"codex.codexSession" = "Codex · 5 小時";
+"codex.codexWeekly" = "Codex · 每週";
+"codex.codexIndicator" = "下方圓點";
+"codex.codexTitle" = "Codex 剩餘額度";
+"codex.codexRefresh" = "重新整理額度";
+"codex.codexUpdated" = "更新於";
+"codex.codexResets" = "重設時間";
+"codex.codexRemaining" = "剩餘 %d%%";
+"codex.codexUnknown" = "無法使用或已過期";
+"codex.codexLoading" = "正在讀取額度…";
+"codex.codexSignIn" = "請透過 Codex CLI 重新登入（codex login）。需要本機 ChatGPT auth.json 登入檔案。";
+"codex.codexNetworkError" = "無法更新額度，請檢查網路後重試。";
+"codex.codexUnsupported" = "此帳號未提供支援的額度視窗。";
+"codex.codexAccountChanged" = "Codex 帳號已切換，請重新整理以讀取目前帳號。";
+"codex.codexHint" = "選用功能：讀取本機 Codex 登入資訊（CODEX_HOME/auth.json 或 ~/.codex/auth.json），僅向 chatgpt.com 傳送權杖，每分鐘查詢額度。不儲存或修改憑證。空心點表示未知，亮點越多表示剩餘額度越多。";

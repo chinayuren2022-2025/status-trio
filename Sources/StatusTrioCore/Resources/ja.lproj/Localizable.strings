@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "表示ルール";
 "settings.audio.activeDeviceFootnote" = "現在アクティブな音声出力デバイスはアクセントカラーでハイライトされます。";
 "settings.audio.inUse" = "使用中";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "音量";
+"codex.codexSession" = "Codex · 5時間";
+"codex.codexWeekly" = "Codex · 週間";
+"codex.codexIndicator" = "下部のドット";
+"codex.codexTitle" = "Codex 利用枠の残量";
+"codex.codexRefresh" = "利用枠を更新";
+"codex.codexUpdated" = "更新時刻";
+"codex.codexResets" = "リセット";
+"codex.codexRemaining" = "残り %d%%";
+"codex.codexUnknown" = "取得不可または期限切れ";
+"codex.codexLoading" = "利用枠を取得中…";
+"codex.codexSignIn" = "Codex CLI（codex login）で再ログインしてください。ローカルの ChatGPT auth.json が必要です。";
+"codex.codexNetworkError" = "更新できませんでした。接続を確認して再試行してください。";
+"codex.codexUnsupported" = "このアカウントには対応する利用枠がありません。";
+"codex.codexAccountChanged" = "Codex アカウントが変更されました。更新してください。";
+"codex.codexHint" = "任意：ローカルの Codex ログイン情報（CODEX_HOME/auth.json または ~/.codex/auth.json）を読み、chatgpt.com にのみトークンを送って毎分利用枠を確認します。認証情報は保存・変更しません。白抜きの点は不明、点灯が多いほど残量が多いことを示します。";

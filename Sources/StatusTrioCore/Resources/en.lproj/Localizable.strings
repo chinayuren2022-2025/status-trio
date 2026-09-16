@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "Display Rules";
 "settings.audio.activeDeviceFootnote" = "The active audio output device is highlighted with the accent color.";
 "settings.audio.inUse" = "In Use";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "Volume";
+"codex.codexSession" = "Codex · 5 hours";
+"codex.codexWeekly" = "Codex · Weekly";
+"codex.codexIndicator" = "Bottom dots";
+"codex.codexTitle" = "Codex remaining usage";
+"codex.codexRefresh" = "Refresh usage";
+"codex.codexUpdated" = "Updated";
+"codex.codexResets" = "Resets";
+"codex.codexRemaining" = "%d%% remaining";
+"codex.codexUnknown" = "Unavailable or stale";
+"codex.codexLoading" = "Loading usage…";
+"codex.codexSignIn" = "Sign in again with Codex CLI (codex login). A local ChatGPT auth.json is required.";
+"codex.codexNetworkError" = "Could not refresh usage. Check your connection and retry.";
+"codex.codexUnsupported" = "This account does not provide supported usage windows.";
+"codex.codexAccountChanged" = "Codex account changed. Refresh to load the current account.";
+"codex.codexHint" = "Optional: reads the local Codex login (CODEX_HOME/auth.json or ~/.codex/auth.json) and sends its token only to chatgpt.com to check usage every minute. No credentials are stored or changed. Hollow dots mean unknown; more filled dots mean more remaining usage.";

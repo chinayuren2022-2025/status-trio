@@ -25,6 +25,7 @@ struct MenuBarStatus: Equatable, Sendable {
     let wifi: WiFiStatus
     let connection: NetworkConnection
     let volume: MenuBarVolumeStatus
+    var codexIndicator: CodexQuotaIndicator? = nil
 
     init(
         battery: BatteryStatus,

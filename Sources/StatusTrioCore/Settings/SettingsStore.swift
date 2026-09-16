@@ -291,10 +291,16 @@ final class SettingsStore: ObservableObject {
         )
     }
 
+    @Published var bottomIndicatorMode: BottomIndicatorMode {
+        didSet { defaults.set(bottomIndicatorMode.rawValue, forKey: "bottomIndicatorMode") }
+    }
+
     private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
+        self.bottomIndicatorMode = defaults.string(forKey: "bottomIndicatorMode")
+            .flatMap(BottomIndicatorMode.init(rawValue:)) ?? .volume
         let storedIconSize = (defaults.object(forKey: Self.iconSizeDefaultsKey) as? NSNumber)?.doubleValue
         let storedCriticalThreshold = (defaults.object(forKey: Self.batteryCriticalThresholdDefaultsKey) as? NSNumber)?.doubleValue
         let storedBatterySymbolScale = (defaults.object(forKey: Self.batterySymbolScaleDefaultsKey) as? NSNumber)?.doubleValue

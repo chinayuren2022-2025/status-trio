@@ -87,6 +87,7 @@ final class LocalizationTests: XCTestCase {
             .commonLabelValue: 2,
             .wifiValueBars: 1,
             .wifiAccessibilityWithSSID: 2,
+            .codexRemaining: 1,
             .volumeTitle: 1,
             .volumeValue: 2,
             .volumeOutputSwitchTo: 1,

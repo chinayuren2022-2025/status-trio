@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "Règles d'affichage";
 "settings.audio.activeDeviceFootnote" = "Le périphérique de sortie audio actif est mis en évidence avec la couleur d'accentuation.";
 "settings.audio.inUse" = "En cours d'utilisation";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "Volume";
+"codex.codexSession" = "Codex · 5 heures";
+"codex.codexWeekly" = "Codex · Semaine";
+"codex.codexIndicator" = "Points inférieurs";
+"codex.codexTitle" = "Quota Codex restant";
+"codex.codexRefresh" = "Actualiser le quota";
+"codex.codexUpdated" = "Mis à jour";
+"codex.codexResets" = "Réinitialisation";
+"codex.codexRemaining" = "%d%% restant";
+"codex.codexUnknown" = "Indisponible ou périmé";
+"codex.codexLoading" = "Chargement du quota…";
+"codex.codexSignIn" = "Reconnectez-vous avec Codex CLI (codex login). Un fichier ChatGPT auth.json local est requis.";
+"codex.codexNetworkError" = "Actualisation impossible. Vérifiez la connexion et réessayez.";
+"codex.codexUnsupported" = "Ce compte ne fournit pas de périodes de quota compatibles.";
+"codex.codexAccountChanged" = "Le compte Codex a changé. Actualisez les données.";
+"codex.codexHint" = "Facultatif : lit la connexion Codex locale (CODEX_HOME/auth.json ou ~/.codex/auth.json) et envoie le jeton uniquement à chatgpt.com pour vérifier le quota chaque minute. Aucun identifiant n’est enregistré ou modifié. Les points creux indiquent un état inconnu ; davantage de points allumés signifie davantage de quota restant.";

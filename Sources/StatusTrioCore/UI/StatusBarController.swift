@@ -27,6 +27,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
     private let store: SystemStatusStore
     private let settings: SettingsStore
     private let localization: Localization
+    private var codexCancellables: Set<AnyCancellable> = []
     private var cancellable: AnyCancellable?
     private var localizationCancellable: AnyCancellable?
     private var iconSizeCancellable: AnyCancellable?
@@ -75,6 +76,19 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         configurePopover()
         observeAppearanceChanges()
         scheduleInitialRender()
+
+        settings.$bottomIndicatorMode
+            .removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] mode in
+                self?.store.codexQuota.setMode(mode)
+                self?.renderLatestSnapshot()
+            }
+            .store(in: &codexCancellables)
+        store.codexQuota.$state
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.renderLatestSnapshot() }
+            .store(in: &codexCancellables)
 
         cancellable = store.$snapshot
             .removeDuplicates()
@@ -505,6 +519,8 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
     ) {
         guard isStatusItemVisible, let button = statusItem.button else { return }
 
+        var status = status
+        status.codexIndicator = store.codexQuota.indicator(for: settings.bottomIndicatorMode)
         let key = StatusBarRenderKey(
             status: status,
             iconSize: iconSize,
@@ -512,14 +528,14 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             connectionOptions: connectionOptions,
             appearanceName: button.effectiveAppearance.name.rawValue
         )
-        guard renderCache.shouldRender(key) else { return }
-
-        button.image = StatusIconRenderer.image(
+        if renderCache.shouldRender(key) {
+            button.image = StatusIconRenderer.image(
             menuBarStatus: status,
             size: iconSize,
             options: options,
             connectionOptions: connectionOptions
-        )
+            )
+        }
 
         let nextAccessibilityKey = StatusBarAccessibilityKey(
             status: status,

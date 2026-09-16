@@ -159,3 +159,7 @@ Copyright 2026 lingyired。
 
 由 [lingyired](https://github.com/lingyired) 创建并维护。<br>
 主页：[https://statustrio.lingai.net/](https://statustrio.lingai.net/)
+
+## 可选的 Codex 额度圆点
+
+在设置 → 菜单栏 → 下方圆点中，可将音量指示切换为 Codex 5 小时或每周剩余额度。此功能默认关闭，使用本机 Codex 的 ChatGPT 登录信息。详见[配置、隐私与限制](docs/codex-quota.md)。

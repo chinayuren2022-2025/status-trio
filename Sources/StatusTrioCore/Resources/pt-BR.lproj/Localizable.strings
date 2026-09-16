@@ -220,3 +220,21 @@
 "settings.audio.displayRules" = "Regras de exibição";
 "settings.audio.activeDeviceFootnote" = "O dispositivo de saída de áudio ativo é destacado com a cor de destaque.";
 "settings.audio.inUse" = "Em uso";
+
+// Optional Codex quota indicator
+"codex.volumeTitlePlain" = "Volume";
+"codex.codexSession" = "Codex · 5 horas";
+"codex.codexWeekly" = "Codex · Semanal";
+"codex.codexIndicator" = "Pontos inferiores";
+"codex.codexTitle" = "Cota restante do Codex";
+"codex.codexRefresh" = "Atualizar cota";
+"codex.codexUpdated" = "Atualizado";
+"codex.codexResets" = "Redefinição";
+"codex.codexRemaining" = "%d%% restante";
+"codex.codexUnknown" = "Indisponível ou desatualizado";
+"codex.codexLoading" = "Carregando cota…";
+"codex.codexSignIn" = "Entre novamente com o Codex CLI (codex login). É necessário um auth.json local do ChatGPT.";
+"codex.codexNetworkError" = "Não foi possível atualizar. Verifique a conexão e tente novamente.";
+"codex.codexUnsupported" = "Esta conta não fornece períodos de cota compatíveis.";
+"codex.codexAccountChanged" = "A conta Codex mudou. Atualize os dados.";
+"codex.codexHint" = "Opcional: lê o login local do Codex (CODEX_HOME/auth.json ou ~/.codex/auth.json) e envia o token apenas para chatgpt.com para verificar a cota a cada minuto. Não salva nem altera credenciais. Pontos vazios indicam estado desconhecido; mais pontos acesos indicam mais cota restante.";
