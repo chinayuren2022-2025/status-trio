@@ -33,6 +33,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
     private var iconSizeCancellable: AnyCancellable?
     private var batteryOptionsCancellable: AnyCancellable?
     private var connectionIconOptionsCancellable: AnyCancellable?
+    private var volumeOptionsCancellable: AnyCancellable?
     private var screenParametersCancellable: AnyCancellable?
     private var refreshIntervalCancellable: AnyCancellable?
     private let openSettings: () -> Void
@@ -45,6 +46,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
     private var volumeScrollMonitor: Any?
     private let volumeScrollAdjustment = PopupVolumeScrollAdjustment()
     private var volumeScrollSession = PopupVolumeScrollSession()
+    private let popoverScrollTargets = PopoverScrollTargets()
     private var dockAnchorWindow: NSWindow?
     private var popoverToggleGate = PopoverToggleGate(
         lockout: StatusBarController.popoverToggleLockoutInterval
@@ -109,7 +111,8 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
                     status: MenuBarStatus(snapshot: self.store.snapshot),
                     iconSize: iconSize,
                     options: self.settings.batteryIconOptions,
-                    connectionOptions: self.settings.connectionIconOptions
+                    connectionOptions: self.settings.connectionIconOptions,
+                    volumeOptions: self.settings.volumeIconOptions
                 )
             }
 
@@ -119,6 +122,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             settings.$usesBatteryStatusColors,
             settings.$batteryCriticalThreshold
         )
+        .combineLatest(settings.$showsPercentageWhenConnected)
         .combineLatest(settings.$batterySymbolScale)
         .sink { [weak self] batteryValues, symbolScale in
             guard let self else { return }
@@ -127,19 +131,22 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
                 showsChargingIndicator,
                 usesStatusColors,
                 criticalThreshold
-            ) = batteryValues
+            ) = batteryValues.0
+            let showsPercentageWhenConnected = batteryValues.1
             let options = BatteryIconOptions(
                 showsPercentage: showsPercentage,
                 showsChargingIndicator: showsChargingIndicator,
                 usesStatusColors: usesStatusColors,
                 criticalThreshold: Int(criticalThreshold.rounded()),
+                showsPercentageWhenConnected: showsPercentageWhenConnected,
                 textScale: symbolScale * BatteryIconOptions.defaultTextScale
             )
             self.render(
                 status: MenuBarStatus(snapshot: self.store.snapshot),
                 iconSize: self.settings.iconSize,
                 options: options,
-                connectionOptions: self.settings.connectionIconOptions
+                connectionOptions: self.settings.connectionIconOptions,
+                volumeOptions: self.settings.volumeIconOptions
             )
         }
 
@@ -149,26 +156,29 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             settings.$showsWiFiIconForTemporaryConnection,
             settings.$showsWiFiIconForInternetSharing
         )
-        .sink { [weak self] values in
+        .combineLatest(settings.$wifiSymbolScale)
+        .sink { [weak self] _ in
             guard let self else { return }
-            let (
-                showsForEthernet,
-                showsForHotspot,
-                showsForTemporaryConnection,
-                showsForInternetSharing
-            ) = values
             self.render(
                 status: MenuBarStatus(snapshot: self.store.snapshot),
                 iconSize: self.settings.iconSize,
                 options: self.settings.batteryIconOptions,
-                connectionOptions: ConnectionIconOptions(
-                    showsWiFiIconForEthernet: showsForEthernet,
-                    showsWiFiIconForHotspot: showsForHotspot,
-                    showsWiFiIconForTemporaryConnection: showsForTemporaryConnection,
-                    showsWiFiIconForInternetSharing: showsForInternetSharing
-                )
+                connectionOptions: self.settings.connectionIconOptions,
+                volumeOptions: self.settings.volumeIconOptions
             )
         }
+
+        volumeOptionsCancellable = settings.$volumeDisplayStyle
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.render(
+                    status: MenuBarStatus(snapshot: self.store.snapshot),
+                    iconSize: self.settings.iconSize,
+                    options: self.settings.batteryIconOptions,
+                    connectionOptions: self.settings.connectionIconOptions,
+                    volumeOptions: self.settings.volumeIconOptions
+                )
+            }
 
         localizationCancellable = localization.$resolvedLanguage
             .removeDuplicates()
@@ -269,6 +279,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             StatusPopoverView(
                 store: store,
                 settings: settings,
+                scrollTargets: popoverScrollTargets,
                 requestWiFiNameAccess: handleRequestWiFiNameAccess,
                 requestBluetoothAuthorization: handleRequestBluetoothAuthorization,
                 openBatterySettings: handleOpenBatterySettings,
@@ -416,8 +427,10 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
 
     private func shouldConsumeVolumeScrollWheel(_ event: NSEvent) -> Bool {
         guard event.window === popover.contentViewController?.view.window,
+              settings.popupScrollAdjustsVolume,
               store.isVolumeControlAvailable,
-              !isPointerOverScrollView(event) else {
+              !isPointerOverScrollView(event),
+              isPointerInsideVolumeScrollArea(event) else {
             return false
         }
         guard event.momentumPhase.isEmpty else { return true }
@@ -430,7 +443,9 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         }
         let delta = volumeScrollAdjustment.volumeDelta(
             deltaY: Double(event.scrollingDeltaY),
-            isPrecise: event.hasPreciseScrollingDeltas
+            isPrecise: event.hasPreciseScrollingDeltas,
+            isDirectionInverted: event.isDirectionInvertedFromDevice,
+            usesNaturalScrolling: settings.popupVolumeNaturalScrolling
         )
         guard let delta else { return true }
 
@@ -446,6 +461,16 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         }
         store.setVolume(nextScalar)
         return true
+    }
+
+    /// Scroll targeting only narrows the gesture area; the whole panel stays
+    /// valid when the preference is left at its default.
+    private func isPointerInsideVolumeScrollArea(_ event: NSEvent) -> Bool {
+        guard settings.popupVolumeScrollScope == .volumeControl else { return true }
+        return popoverScrollTargets.containsVolumeControl(
+            at: event.locationInWindow,
+            in: event.window
+        )
     }
 
     private func isPointerOverScrollView(_ event: NSEvent) -> Bool {
@@ -507,7 +532,8 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             status: status,
             iconSize: settings.iconSize,
             options: settings.batteryIconOptions,
-            connectionOptions: settings.connectionIconOptions
+            connectionOptions: settings.connectionIconOptions,
+            volumeOptions: settings.volumeIconOptions
         )
     }
 
@@ -515,7 +541,8 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         status: MenuBarStatus,
         iconSize: Double,
         options: BatteryIconOptions,
-        connectionOptions: ConnectionIconOptions
+        connectionOptions: ConnectionIconOptions,
+        volumeOptions: VolumeIconOptions
     ) {
         guard isStatusItemVisible, let button = statusItem.button else { return }
 
@@ -526,14 +553,16 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             iconSize: iconSize,
             options: options,
             connectionOptions: connectionOptions,
+            volumeOptions: volumeOptions,
             appearanceName: button.effectiveAppearance.name.rawValue
         )
         if renderCache.shouldRender(key) {
             button.image = StatusIconRenderer.image(
-            menuBarStatus: status,
-            size: iconSize,
-            options: options,
-            connectionOptions: connectionOptions
+                menuBarStatus: status,
+                size: iconSize,
+                options: options,
+                connectionOptions: connectionOptions,
+                volumeOptions: volumeOptions
             )
         }
 

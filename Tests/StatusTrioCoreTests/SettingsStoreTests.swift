@@ -10,7 +10,26 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertEqual(SettingsStore.iconSizeRange, 16...36)
 
         let store = SettingsStore(defaults: makeSuite().defaults)
-        XCTAssertEqual(store.iconSize, 28, accuracy: 0.001)
+        XCTAssertEqual(store.iconSize, 24, accuracy: 0.001)
+    }
+
+    func testConnectedPowerPercentageDefaultsOffAndFeedsTheIconOptions() {
+        let store = SettingsStore(defaults: makeSuite().defaults)
+
+        XCTAssertFalse(store.showsPercentageWhenConnected)
+        XCTAssertFalse(store.batteryIconOptions.showsPercentageWhenConnected)
+    }
+
+    func testConnectedPowerPercentageChoicePersists() {
+        let suite = makeSuite()
+        defer { clear(suite) }
+
+        let first = SettingsStore(defaults: suite.defaults)
+        first.showsPercentageWhenConnected = true
+
+        let second = SettingsStore(defaults: suite.defaults)
+        XCTAssertTrue(second.showsPercentageWhenConnected)
+        XCTAssertTrue(second.batteryIconOptions.showsPercentageWhenConnected)
     }
 
     func testRefreshIntervalDefaultsAndRange() {
@@ -76,7 +95,10 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertFalse(store.showsWiFiIconForHotspot)
         XCTAssertFalse(store.showsWiFiIconForTemporaryConnection)
         XCTAssertFalse(store.showsWiFiIconForInternetSharing)
-        XCTAssertEqual(store.connectionIconOptions, .standard)
+        XCTAssertEqual(
+            store.connectionIconOptions,
+            ConnectionIconOptions(wifiScale: SettingsStore.defaultWifiSymbolScale)
+        )
     }
 
     func testConnectionIconDisplaySettingsPersistAcrossStoreInstances() {
@@ -94,6 +116,46 @@ final class SettingsStoreTests: XCTestCase {
         XCTAssertTrue(second.showsWiFiIconForHotspot)
         XCTAssertTrue(second.showsWiFiIconForTemporaryConnection)
         XCTAssertTrue(second.showsWiFiIconForInternetSharing)
+    }
+
+    func testWiFiSymbolScaleDefaultsAndClamping() {
+        let store = SettingsStore(defaults: makeSuite().defaults)
+
+        XCTAssertEqual(SettingsStore.wifiSymbolScaleRange, 1.0...1.8)
+        XCTAssertEqual(store.wifiSymbolScale, 1.6, accuracy: 0.001)
+
+        store.wifiSymbolScale = 2.5
+        XCTAssertEqual(store.wifiSymbolScale, 1.8, accuracy: 0.001)
+
+        store.wifiSymbolScale = 0.5
+        XCTAssertEqual(store.wifiSymbolScale, 1.0, accuracy: 0.001)
+    }
+
+    func testWiFiSymbolScalePersistsAcrossStoreInstances() {
+        let suite = makeSuite()
+        defer { clear(suite) }
+
+        let first = SettingsStore(defaults: suite.defaults)
+        first.wifiSymbolScale = 1.45
+
+        let second = SettingsStore(defaults: suite.defaults)
+        XCTAssertEqual(second.wifiSymbolScale, 1.45, accuracy: 0.001)
+        XCTAssertEqual(second.connectionIconOptions.wifiScale, 1.45, accuracy: 0.001)
+    }
+
+    func testVolumeDisplayStyleDefaultsAndPersists() {
+        let suite = makeSuite()
+        defer { clear(suite) }
+
+        let first = SettingsStore(defaults: suite.defaults)
+        XCTAssertEqual(first.volumeDisplayStyle, .dots)
+        XCTAssertEqual(first.volumeIconOptions.displayStyle, .dots)
+
+        first.volumeDisplayStyle = .arc
+
+        let second = SettingsStore(defaults: suite.defaults)
+        XCTAssertEqual(second.volumeDisplayStyle, .arc)
+        XCTAssertEqual(second.volumeIconOptions.displayStyle, .arc)
     }
 
     func testBatteryCriticalThresholdIsClamped() {
@@ -190,13 +252,13 @@ final class SettingsStoreTests: XCTestCase {
         defer { clear(suite) }
         suite.defaults.set("huge", forKey: SettingsStore.iconSizeDefaultsKey)
 
-        XCTAssertEqual(SettingsStore(defaults: suite.defaults).iconSize, 28, accuracy: 0.001)
+        XCTAssertEqual(SettingsStore(defaults: suite.defaults).iconSize, 24, accuracy: 0.001)
     }
 
     func testClampHelperRejectsNonFiniteValues() {
-        XCTAssertEqual(SettingsStore.clampedIconSize(.nan), 28, accuracy: 0.001)
-        XCTAssertEqual(SettingsStore.clampedIconSize(.infinity), 28, accuracy: 0.001)
-        XCTAssertEqual(SettingsStore.clampedIconSize(-.infinity), 28, accuracy: 0.001)
+        XCTAssertEqual(SettingsStore.clampedIconSize(.nan), 24, accuracy: 0.001)
+        XCTAssertEqual(SettingsStore.clampedIconSize(.infinity), 24, accuracy: 0.001)
+        XCTAssertEqual(SettingsStore.clampedIconSize(-.infinity), 24, accuracy: 0.001)
         XCTAssertEqual(SettingsStore.clampedBatterySymbolScale(.nan), 1, accuracy: 0.001)
         XCTAssertEqual(SettingsStore.clampedBatterySymbolScale(.infinity), 1, accuracy: 0.001)
     }
@@ -209,7 +271,7 @@ final class SettingsStoreTests: XCTestCase {
         store.iconSize = 21
 
         withExtendedLifetime(cancellable) {
-            XCTAssertEqual(received, [28, 21])
+            XCTAssertEqual(received, [24, 21])
         }
     }
 
@@ -301,6 +363,73 @@ final class SettingsStoreTests: XCTestCase {
         let store = SettingsStore(defaults: makeSuite().defaults)
 
         XCTAssertEqual(store.popupSectionOrder, [.battery, .network, .bluetooth, .volume])
+    }
+
+    func testPopupVolumeScrollDefaultsToEverywhereSystemDirectionAndNaturalScrollingOff() {
+        let store = SettingsStore(defaults: makeSuite().defaults)
+
+        XCTAssertTrue(store.popupScrollAdjustsVolume)
+        XCTAssertEqual(store.popupVolumeScrollScope, .panel)
+        XCTAssertEqual(store.popupVolumeScrollDirection, .up)
+        XCTAssertFalse(store.popupVolumeNaturalScrolling)
+    }
+
+    func testPopupVolumeScrollChoicesPersistAcrossStoreInstances() {
+        let suite = makeSuite()
+        defer { clear(suite) }
+
+        let first = SettingsStore(defaults: suite.defaults)
+        first.popupScrollAdjustsVolume = false
+        first.popupVolumeScrollScope = .volumeControl
+        first.popupVolumeScrollDirection = .down
+        first.popupVolumeNaturalScrolling = true
+
+        let second = SettingsStore(defaults: suite.defaults)
+        XCTAssertFalse(second.popupScrollAdjustsVolume)
+        XCTAssertEqual(second.popupVolumeScrollScope, .volumeControl)
+        XCTAssertEqual(second.popupVolumeScrollDirection, .down)
+        XCTAssertTrue(second.popupVolumeNaturalScrolling)
+    }
+
+    func testPopupVolumeNaturalScrollingFallsBackToOffForNonBooleanStoredValue() {
+        let suite = makeSuite()
+        defer { clear(suite) }
+        suite.defaults.set(
+            "yes",
+            forKey: SettingsStore.popupVolumeNaturalScrollingDefaultsKey
+        )
+
+        let store = SettingsStore(defaults: suite.defaults)
+
+        XCTAssertFalse(store.popupVolumeNaturalScrolling)
+    }
+
+    func testUnknownStoredPopupVolumeScrollValuesFallBackToDefaults() {
+        let suite = makeSuite()
+        defer { clear(suite) }
+        suite.defaults.set(
+            "nowhere",
+            forKey: SettingsStore.popupVolumeScrollScopeDefaultsKey
+        )
+        suite.defaults.set(
+            "sideways",
+            forKey: SettingsStore.popupVolumeScrollDirectionDefaultsKey
+        )
+
+        let store = SettingsStore(defaults: suite.defaults)
+
+        XCTAssertEqual(store.popupVolumeScrollScope, .panel)
+        XCTAssertEqual(store.popupVolumeScrollDirection, .up)
+        XCTAssertFalse(store.popupVolumeNaturalScrolling)
+    }
+
+    func testPopupVolumeScrollOptionsExposeStableChoices() {
+        XCTAssertEqual(PopupVolumeScrollScope.allCases, [.panel, .volumeControl])
+        XCTAssertEqual(PopupVolumeScrollDirection.allCases, [.up, .down])
+        XCTAssertEqual(PopupVolumeScrollScope.panel.id, .panel)
+        XCTAssertEqual(PopupVolumeScrollDirection.up.id, .up)
+        XCTAssertTrue(PopupVolumeScrollDirection.up.increasesWithScrollUp)
+        XCTAssertFalse(PopupVolumeScrollDirection.down.increasesWithScrollUp)
     }
 
     func testPopupSectionVisibilityDefaultsToEverythingExceptBluetooth() {

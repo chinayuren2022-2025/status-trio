@@ -75,6 +75,7 @@ struct CodexIconPreview: View {
         return Image(nsImage: StatusIconRenderer.image(
             menuBarStatus: status, size: settings.iconSize,
             options: settings.batteryIconOptions, connectionOptions: settings.connectionIconOptions,
+            volumeOptions: settings.volumeIconOptions,
             appearance: NSAppearance(named: isDark ? .darkAqua : .aqua)
         ))
     }

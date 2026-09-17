@@ -4,13 +4,21 @@ struct PopupVolumeScrollAdjustment {
     private static let preciseVolumePerPoint = 0.002
     private static let discreteVolumePerLine = 0.02
 
-    func volumeDelta(deltaY: Double, isPrecise: Bool) -> Double? {
+    func volumeDelta(
+        deltaY: Double,
+        isPrecise: Bool,
+        isDirectionInverted: Bool,
+        usesNaturalScrolling: Bool
+    ) -> Double? {
         guard deltaY.isFinite, deltaY != 0 else { return nil }
 
         let volumePerUnit = isPrecise
             ? Self.preciseVolumePerPoint
             : Self.discreteVolumePerLine
-        return deltaY * volumePerUnit
+        let scrollUpDelta = usesNaturalScrolling
+            ? (isDirectionInverted ? -deltaY : deltaY)
+            : deltaY
+        return scrollUpDelta * volumePerUnit
     }
 }
 

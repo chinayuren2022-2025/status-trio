@@ -1,6 +1,6 @@
 # Optional Codex quota indicator
 
-Settings → Menu Bar → Bottom dots lets users keep **Volume** (the default), or choose **Codex · 5 hours** / **Codex · Weekly**. Only the menu bar dots and their settings preview change; the Dock icon and all volume controls keep their existing behavior.
+Settings → App Icon → Bottom dots lets users keep **Volume** (the default), or choose **Codex · 5 hours** / **Codex · Weekly**. The menu bar, Dock, and both settings previews show the same quota dots. The volume controls keep their existing behavior. The audio dot/arc style applies only in Volume mode; Codex always uses quota dots.
 
 The four dots represent **remaining**, not consumed, usage. Zero remaining shows four dim filled tracks; positive values up to 25%, 50%, 75%, and 100% light one, two, three, and four dots respectively. Hollow dots mean unavailable, expired, or not yet loaded. The popup and settings show both supported windows, reset dates, the last successful update time, and a refresh button.
 
@@ -26,3 +26,9 @@ Identify the 5-hour and weekly windows by `limit_window_seconds` (18000 / 604800
 ## Validation
 
 `swift test` covers parsing and boundaries, weekly-only plans, stale/reset readings, credential selection, HTTP failures, account switches, opt-out/cancellation, settings persistence, rendering, accessibility, and localization. Network tests use fake credentials and an injected transport; the default test suite never reads a real login or contacts OpenAI.
+
+## Fork maintenance
+
+This fork tracks the upstream icon and system-status improvements, including the native Wi-Fi symbol, symbol scale, connected-power plug, and compact audio controls. Quota rendering and cache invalidation cover both menu bar and Dock.
+
+`release.json` and `Support/Info.plist` target this fork's separate `fork-appcast.xml`. It is intentionally empty until fork-signed automatic updates are configured; do not add upstream releases to it. The inherited public update key is not a fork signing identity. A future auto-update release requires a fork-owned Sparkle key pair and matching public key before publishing. Current builds use `publish=false` CI artifacts and manual installation.

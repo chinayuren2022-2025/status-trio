@@ -3,15 +3,49 @@ import SwiftUI
 struct AudioSectionView: View {
     @ObservedObject var store: SettingsStore
     @ObservedObject var statusStore: SystemStatusStore
+    @Binding var previewIsDark: Bool
     @EnvironmentObject private var localization: Localization
 
     var body: some View {
         SettingsPage {
+            StatusIconPreviewCard(
+                store: store,
+                statusStore: statusStore,
+                isDarkBackground: $previewIsDark
+            )
+
+            if store.bottomIndicatorMode == .volume {
+                indicatorStyleGroup
+            }
             displayRulesGroup
             deviceOrderGroup
         }
         .onAppear {
             statusStore.refreshAll()
+        }
+    }
+
+    private var indicatorStyleGroup: some View {
+        SettingsGroup(localization.string(.settingsAudioIndicatorStyleTitle)) {
+            SettingsRow(
+                "waveform",
+                tint: .indigo,
+                title: localization.string(.settingsAudioIndicatorStyle),
+                subtitle: localization.string(.settingsAudioIndicatorStyleDescription)
+            ) {
+                Picker(
+                    localization.string(.settingsAudioIndicatorStyle),
+                    selection: $store.volumeDisplayStyle
+                ) {
+                    Text(localization.string(.settingsAudioIndicatorStyleDots))
+                        .tag(VolumeDisplayStyle.dots)
+                    Text(localization.string(.settingsAudioIndicatorStyleArc))
+                        .tag(VolumeDisplayStyle.arc)
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                .frame(width: 150)
+            }
         }
     }
 
@@ -74,7 +108,7 @@ struct AudioSectionView: View {
                     List {
                         ForEach(orderedDevices) { device in
                             HStack(spacing: 10) {
-                                Image(systemName: device.isCurrent ? "hifispeaker.fill" : "hifispeaker")
+                                AudioOutputDeviceIconView(device: device)
                                     .foregroundStyle(device.isCurrent ? Color.accentColor : Color.secondary)
                                     .frame(width: 18)
 

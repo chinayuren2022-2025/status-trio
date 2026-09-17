@@ -24,6 +24,7 @@
 "settings.appIconPlacement.menuBar" = "Строка меню";
 "settings.appIconPlacement.dock" = "Dock";
 "settings.appIconPlacement.both" = "Оба";
+"settings.appIcon.dockGroup" = "Значок в Dock";
 "settings.dockIconBackground" = "Фон значка Dock";
 "settings.dockIconBackground.description" = "Применяется к динамическому значку в Dock. «Как в системе» читает «Стиль значков и виджетов» в «Системных настройках › Внешний вид» (macOS 15 или новее).";
 "settings.dockIconBackground.system" = "Как в системе";
@@ -31,20 +32,21 @@
 "settings.dockIconBackground.light" = "Светлый";
 "settings.iconSize" = "Размер значка";
 "settings.iconSize.accessibilityValue" = "%d пунктов";
-"settings.iconSize.description" = "Настраивает размер отрисовки значка в строке меню от 16 до 36 pt.";
+"settings.iconSize.description" = "Настраивает размер отрисовки значка в строке меню от 16 до 36 pt. Значок в Dock сохраняет фиксированный размер.";
+"settings.tab.appIcon" = "Значок приложения";
+"settings.tab.battery" = "Батарея";
+"settings.tab.network" = "Сеть";
+"settings.tab.audio" = "Аудио";
 "settings.tab.basics" = "Основные";
 "settings.tab.panel" = "Панель состояния";
-"settings.tab.menuBar" = "Строка меню";
-"settings.tab.audio" = "Аудио";
-"settings.tab.battery" = "Батарея";
 "settings.tab.about" = "О программе";
 "settings.menuBar.title" = "Значок в строке меню";
-"settings.menuBar.connectionIcons" = "Стиль значков подключения";
-"settings.menuBar.connectionIcons.description" = "Если включено, выбранное состояние отображается стандартным значком сигнала Wi-Fi вместо специального обозначения.";
-"settings.menuBar.wifiIconForEthernet" = "Использовать значок Wi-Fi для Ethernet";
-"settings.menuBar.wifiIconForHotspot" = "Использовать значок Wi-Fi для точки доступа";
-"settings.menuBar.wifiIconForTemporaryConnection" = "Использовать значок Wi-Fi для временного подключения";
-"settings.menuBar.wifiIconForInternetSharing" = "Использовать значок Wi-Fi для общего доступа к интернету";
+"settings.network.connectionIcons" = "Стиль значков подключения";
+"settings.network.connectionIcons.description" = "Если включено, выбранное состояние отображается стандартным значком сигнала Wi-Fi вместо специального обозначения.";
+"settings.network.wifiIconForEthernet" = "Использовать значок Wi-Fi для Ethernet";
+"settings.network.wifiIconForHotspot" = "Использовать значок Wi-Fi для точки доступа";
+"settings.network.wifiIconForTemporaryConnection" = "Использовать значок Wi-Fi для временного подключения";
+"settings.network.wifiIconForInternetSharing" = "Использовать значок Wi-Fi для общего доступа к интернету";
 "settings.audio.maximumVisible" = "Максимум видимых устройств вывода";
 "settings.audio.maximumVisibleDescription" = "Сколько устройств вывода показывать до кнопки «Развернуть».";
 "settings.audio.showAll" = "Всегда показывать все устройства вывода";
@@ -63,8 +65,10 @@
 "settings.about.copyright" = "© lingyired";
 "settings.battery.title" = "Отображение батареи";
 "settings.battery.showPercentage" = "Показывать процент заряда";
-"settings.battery.showChargingIndicator" = "Показывать молнию при зарядке или питании от сети";
-"settings.battery.chargingDescription" = "Если включено, процент заменяется молнией во время зарядки или при питании от сети.";
+"settings.battery.showChargingIndicator" = "Показывать значок при зарядке или питании от сети";
+"settings.battery.chargingDescription" = "Если включено, процент заменяется молнией или вилкой во время зарядки или при питании от сети.";
+"settings.battery.percentageWhenConnected" = "Показывать процент при питании от сети без зарядки";
+"settings.battery.percentageWhenConnectedDescription" = "Если включено, при питании от сети без зарядки показывается процент вместо вилки.";
 "settings.battery.symbolScale" = "Размер процента и молнии";
 "settings.battery.symbolScaleAccessibility" = "Размер процента батареи и молнии";
 "settings.battery.symbolScaleDescription" = "Процент и молния используют один размер.";
@@ -90,7 +94,6 @@
 "common.parenthetical" = "%@ (%@)";
 "common.labelValue" = "%@, %@";
 "wifi.title" = "Wi-Fi";
-"network.title" = "Сеть";
 "wifi.value.bars" = "%d дел.";
 "wifi.value.notAssociated" = "Не подключено";
 "wifi.value.off" = "Выключено";
@@ -137,6 +140,19 @@
 "settings.popup.order.description" = "Выберите элементы, отображаемые на панели состояния, и перетаскивайте их, чтобы изменить порядок.";
 "settings.popup.order.battery" = "Аккумулятор";
 "settings.popup.order.volume" = "Громкость";
+"settings.popup.volumeScroll.group" = "Прокрутка панели";
+"settings.popup.volumeScroll" = "Регулировать громкость прокруткой";
+"settings.popup.volumeScroll.description" = "Прокручивайте внутри панели состояния, чтобы изменить громкость вывода.";
+"settings.popup.volumeScroll.scope" = "Область";
+"settings.popup.volumeScroll.scope.description" = "Выберите, где прокрутка изменяет громкость.";
+"settings.popup.volumeScroll.scope.panel" = "Вся панель";
+"settings.popup.volumeScroll.scope.volumeControl" = "Только регулятор громкости";
+"settings.popup.volumeScroll.natural" = "Естественная прокрутка";
+"settings.popup.volumeScroll.natural.description" = "Если включено, прокрутка вверх мышью или трекпадом увеличивает громкость. Если выключено, громкость следует направлению прокрутки системы. Если после включения этой опции прокрутка мыши вверх всё ещё уменьшает громкость, настройте MOS, Scroll Reverser, LinearMouse или похожее приложение так, чтобы Status Trio оставался без изменений, обычно через список исключений/игнорирования (иногда называемый списком разрешённых).";
+"settings.popup.volumeScroll.direction" = "Направление прокрутки";
+"settings.popup.volumeScroll.direction.description" = "Выберите направление, увеличивающее громкость.";
+"settings.popup.volumeScroll.direction.up" = "Вверх";
+"settings.popup.volumeScroll.direction.down" = "Вниз";
 
 "common.back" = "Back";
 "common.cancel" = "Cancel";
@@ -213,7 +229,7 @@
 "bluetooth.authorizationDenied" = "Bluetooth permission is denied. Open Bluetooth Settings.";
 "bluetooth.authorizationRestricted" = "Bluetooth permission is restricted.";
 
-"settings.preview.hint" = "Интерактивный просмотр строки меню · Изменяйте параметры ниже, чтобы сразу видеть результат";
+"settings.preview.hint" = "Интерактивный просмотр · Изменяйте параметры ниже, чтобы сразу видеть результат";
 "settings.preview.dark" = "Темный фон";
 "settings.preview.light" = "Светлый фон";
 "settings.preview.toggleHelp" = "Переключить темный/светлый фон строки меню";
@@ -238,3 +254,14 @@
 "codex.codexUnsupported" = "У этой учётной записи нет поддерживаемых периодов лимита.";
 "codex.codexAccountChanged" = "Учётная запись Codex изменилась. Обновите данные.";
 "codex.codexHint" = "Необязательно: читает локальные данные входа Codex (CODEX_HOME/auth.json или ~/.codex/auth.json) и отправляет токен только на chatgpt.com для проверки лимита раз в минуту. Данные входа не сохраняются и не изменяются. Пустые точки означают неизвестный статус; чем больше ярких точек, тем больше остаток.";
+
+"settings.wifi.symbolScale" = "Размер значка Wi-Fi";
+"settings.wifi.symbolScaleDescription" = "Масштаб значка Wi-Fi внутри кольца состояния от 100% до 180%.";
+"settings.audio.indicatorStyleTitle" = "Стиль индикатора громкости";
+"settings.audio.indicatorStyle" = "Стиль отображения";
+"settings.audio.indicatorStyleDescription" = "Выберите отображение громкости четырьмя точками или сплошной дугой.";
+"settings.audio.indicatorStyle.dots" = "Точки";
+"settings.audio.indicatorStyle.arc" = "Дуга";
+
+/* Compact popover controls. */
+"menu.more" = "Другие действия";

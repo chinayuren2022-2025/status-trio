@@ -71,6 +71,49 @@ struct CodexQuotaTests {
         #expect(!summary.contains("Volume"))
     }
 
+    @Test @MainActor func quotaUsesDotsOnBothSurfacesRegardlessOfVolumeStyle() throws {
+        var status = MenuBarStatus.placeholder
+        status.codexIndicator = .init(mode: .codexWeekly, remainingPercent: 37)
+        let menuDots = try #require(StatusIconRenderer.render(
+            menuBarStatus: status, size: 100, scale: 2, foreground: CGColor(gray: 1, alpha: 1),
+            volumeOptions: .init(displayStyle: .dots)
+        )?.dataProvider?.data)
+        let menuArc = try #require(StatusIconRenderer.render(
+            menuBarStatus: status, size: 100, scale: 2, foreground: CGColor(gray: 1, alpha: 1),
+            volumeOptions: .init(displayStyle: .arc)
+        )?.dataProvider?.data)
+        #expect((menuDots as Data) == (menuArc as Data))
+        let dockDots = try #require(DockIconRenderer.image(status: status,
+            volumeOptions: .init(displayStyle: .dots))?.tiffRepresentation)
+        let dockArc = try #require(DockIconRenderer.image(status: status,
+            volumeOptions: .init(displayStyle: .arc))?.tiffRepresentation)
+        #expect(dockDots == dockArc)
+        status.codexIndicator = .init(mode: .codexWeekly, remainingPercent: nil)
+        let unknown = try #require(DockIconRenderer.image(status: status)?.tiffRepresentation)
+        #expect(unknown != dockDots)
+        status.codexIndicator = .init(mode: .codexWeekly, remainingPercent: 0)
+        let empty = try #require(DockIconRenderer.image(status: status)?.tiffRepresentation)
+        #expect(empty != unknown)
+    }
+
+    @Test func dockCacheDistinguishesQuotaStatesWithoutRedrawingWithinABucket() {
+        func key(_ indicator: CodexQuotaIndicator?) -> DockIconRenderKey {
+            var status = MenuBarStatus.placeholder
+            status.codexIndicator = indicator
+            return DockIconRenderKey(status: status, options: .standard,
+                                     connectionOptions: .standard, backgroundStyle: .dark)
+        }
+        let volume = key(nil)
+        let unknown = key(.init(mode: .codexWeekly, remainingPercent: nil))
+        let empty = key(.init(mode: .codexWeekly, remainingPercent: 0))
+        let two = key(.init(mode: .codexWeekly, remainingPercent: 37))
+        #expect(volume != unknown)
+        #expect(unknown != empty)
+        #expect(empty != two)
+        #expect(two == key(.init(mode: .codexWeekly, remainingPercent: 40)))
+        #expect(two != key(.init(mode: .codexWeekly, remainingPercent: 51)))
+    }
+
     @Test func credentialsPathHonorsExplicitHome() {
         let home = URL(fileURLWithPath: "/example/user")
         #expect(CodexQuotaClient.credentialsURL(environment: [:], home: home).path == "/example/user/.codex/auth.json")

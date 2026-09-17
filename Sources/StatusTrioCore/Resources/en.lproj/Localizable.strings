@@ -24,6 +24,7 @@
 "settings.appIconPlacement.menuBar" = "Menu Bar";
 "settings.appIconPlacement.dock" = "Dock";
 "settings.appIconPlacement.both" = "Both";
+"settings.appIcon.dockGroup" = "Dock Icon";
 "settings.dockIconBackground" = "Dock Icon Background";
 "settings.dockIconBackground.description" = "Applies to the live icon shown in the Dock. “Follow System” reads Icon & Widget Style in System Settings › Appearance (macOS 15 or later).";
 "settings.dockIconBackground.system" = "Follow System";
@@ -31,20 +32,21 @@
 "settings.dockIconBackground.light" = "Light";
 "settings.iconSize" = "Icon Size";
 "settings.iconSize.accessibilityValue" = "%d points";
-"settings.iconSize.description" = "Adjusts the menu bar icon render size from 16–36 pt.";
+"settings.iconSize.description" = "Adjusts the menu bar icon render size from 16–36 pt. The Dock icon keeps its fixed design size.";
+"settings.tab.appIcon" = "App Icon";
+"settings.tab.battery" = "Battery";
+"settings.tab.network" = "Network";
+"settings.tab.audio" = "Audio";
 "settings.tab.basics" = "Basics";
 "settings.tab.panel" = "Status Panel";
-"settings.tab.menuBar" = "Menu Bar";
-"settings.tab.audio" = "Audio";
-"settings.tab.battery" = "Battery";
 "settings.tab.about" = "About";
 "settings.menuBar.title" = "Menu Bar Icon";
-"settings.menuBar.connectionIcons" = "Connection Icon Style";
-"settings.menuBar.connectionIcons.description" = "When enabled, the selected state uses the standard Wi-Fi signal icon instead of its special mark.";
-"settings.menuBar.wifiIconForEthernet" = "Use Wi-Fi icon for Ethernet";
-"settings.menuBar.wifiIconForHotspot" = "Use Wi-Fi icon for Personal Hotspot";
-"settings.menuBar.wifiIconForTemporaryConnection" = "Use Wi-Fi icon for Temporary Connection";
-"settings.menuBar.wifiIconForInternetSharing" = "Use Wi-Fi icon for Internet Sharing";
+"settings.network.connectionIcons" = "Connection Icon Style";
+"settings.network.connectionIcons.description" = "When enabled, the selected state uses the standard Wi-Fi signal icon instead of its special mark.";
+"settings.network.wifiIconForEthernet" = "Use Wi-Fi icon for Ethernet";
+"settings.network.wifiIconForHotspot" = "Use Wi-Fi icon for Personal Hotspot";
+"settings.network.wifiIconForTemporaryConnection" = "Use Wi-Fi icon for Temporary Connection";
+"settings.network.wifiIconForInternetSharing" = "Use Wi-Fi icon for Internet Sharing";
 "settings.audio.maximumVisible" = "Maximum Visible Output Devices";
 "settings.audio.maximumVisibleDescription" = "How many output devices appear before the Expand control.";
 "settings.audio.showAll" = "Always Show All Output Devices";
@@ -63,8 +65,10 @@
 "settings.about.copyright" = "© lingyired";
 "settings.battery.title" = "Battery Display";
 "settings.battery.showPercentage" = "Show battery percentage";
-"settings.battery.showChargingIndicator" = "Show bolt while charging or connected to power";
-"settings.battery.chargingDescription" = "When enabled, the percentage becomes a bolt while charging or connected to power.";
+"settings.battery.showChargingIndicator" = "Show an indicator while charging or connected to power";
+"settings.battery.chargingDescription" = "When enabled, the percentage becomes a bolt or plug while charging or connected to power.";
+"settings.battery.percentageWhenConnected" = "Show the percentage while connected without charging";
+"settings.battery.percentageWhenConnectedDescription" = "When enabled, a connected power source that is not charging shows the percentage instead of the plug.";
 "settings.battery.symbolScale" = "Percentage/bolt size";
 "settings.battery.symbolScaleAccessibility" = "Battery percentage and bolt size";
 "settings.battery.symbolScaleDescription" = "The percentage and bolt share this size.";
@@ -90,7 +94,6 @@
 "common.parenthetical" = "%@ (%@)";
 "common.labelValue" = "%@, %@";
 "wifi.title" = "Wi-Fi";
-"network.title" = "Network";
 "wifi.value.bars" = "%d bars";
 "wifi.value.notAssociated" = "Not associated";
 "wifi.value.off" = "Off";
@@ -137,6 +140,19 @@
 "settings.popup.order.description" = "Choose which items appear in the status panel and drag to change their order.";
 "settings.popup.order.battery" = "Battery";
 "settings.popup.order.volume" = "Volume";
+"settings.popup.volumeScroll.group" = "Panel Scrolling";
+"settings.popup.volumeScroll" = "Adjust Volume by Scrolling";
+"settings.popup.volumeScroll.description" = "Scroll inside the status panel to change the output volume.";
+"settings.popup.volumeScroll.scope" = "Adjustment Area";
+"settings.popup.volumeScroll.scope.description" = "Choose where the scroll gesture changes the volume.";
+"settings.popup.volumeScroll.scope.panel" = "Whole Panel";
+"settings.popup.volumeScroll.scope.volumeControl" = "Volume Control Only";
+"settings.popup.volumeScroll.natural" = "Natural Scrolling";
+"settings.popup.volumeScroll.natural.description" = "When on, scrolling up on a mouse or trackpad increases volume. When off, volume follows the system's scrolling direction. If scrolling up still lowers the volume after turning this on, configure MOS, Scroll Reverser, LinearMouse, or a similar app to leave Status Trio unchanged, usually through an exception/ignore list (sometimes called an allowlist).";
+"settings.popup.volumeScroll.direction" = "Scroll Direction";
+"settings.popup.volumeScroll.direction.description" = "Choose the direction that turns the volume up.";
+"settings.popup.volumeScroll.direction.up" = "Scroll Up";
+"settings.popup.volumeScroll.direction.down" = "Scroll Down";
 
 "common.back" = "Back";
 "common.cancel" = "Cancel";
@@ -213,7 +229,7 @@
 "bluetooth.authorizationDenied" = "Bluetooth permission is denied. Open Bluetooth Settings.";
 "bluetooth.authorizationRestricted" = "Bluetooth permission is restricted.";
 
-"settings.preview.hint" = "Live Menu Bar Preview · Adjust settings below to see changes immediately";
+"settings.preview.hint" = "Live Preview · Adjust settings below to see changes immediately";
 "settings.preview.dark" = "Dark Background";
 "settings.preview.light" = "Light Background";
 "settings.preview.toggleHelp" = "Toggle menu bar dark/light preview";
@@ -238,3 +254,14 @@
 "codex.codexUnsupported" = "This account does not provide supported usage windows.";
 "codex.codexAccountChanged" = "Codex account changed. Refresh to load the current account.";
 "codex.codexHint" = "Optional: reads the local Codex login (CODEX_HOME/auth.json or ~/.codex/auth.json) and sends its token only to chatgpt.com to check usage every minute. No credentials are stored or changed. Hollow dots mean unknown; more filled dots mean more remaining usage.";
+
+"settings.wifi.symbolScale" = "Wi-Fi Icon Size";
+"settings.wifi.symbolScaleDescription" = "Scales the Wi-Fi icon inside the status ring from 100% to 180%.";
+"settings.audio.indicatorStyleTitle" = "Volume Indicator Style";
+"settings.audio.indicatorStyle" = "Display Style";
+"settings.audio.indicatorStyleDescription" = "Choose whether volume displays as four discrete dots or a continuous bottom arc.";
+"settings.audio.indicatorStyle.dots" = "Dots";
+"settings.audio.indicatorStyle.arc" = "Arc";
+
+/* Compact popover controls. */
+"menu.more" = "More actions";

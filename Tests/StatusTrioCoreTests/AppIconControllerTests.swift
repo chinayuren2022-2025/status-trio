@@ -112,6 +112,30 @@ struct AppIconControllerTests {
         #expect(harness.log.renderCount == 1)
     }
 
+    @Test func dockFollowsQuotaUpdatesAndReturnsToVolume() async throws {
+        let monitor = CodexQuotaMonitor {
+            CodexQuotaSnapshot(windows: [
+                .init(remainingPercent: 37, resetsAt: Date().addingTimeInterval(600), durationSeconds: 604800)
+            ], fetchedAt: Date())
+        }
+        let harness = try AppIconControllerHarness(initialPlacement: .dock, codexQuota: monitor)
+        defer { harness.cleanUp() }
+        harness.controller.start()
+        harness.settings.bottomIndicatorMode = .codexWeekly
+        monitor.setMode(.codexWeekly)
+        for _ in 0..<50 {
+            if harness.log.statuses.last?.codexIndicator?.remainingPercent == 37 { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(harness.log.statuses.last?.codexIndicator?.remainingPercent == 37)
+        harness.settings.bottomIndicatorMode = .volume
+        for _ in 0..<50 {
+            if harness.log.statuses.last?.codexIndicator == nil { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(harness.log.statuses.last?.codexIndicator == nil)
+    }
+
     @Test func changingBackgroundPreferenceRendersAgain() throws {
         let harness = try AppIconControllerHarness(initialPlacement: .dock)
         defer { harness.cleanUp() }
@@ -122,6 +146,57 @@ struct AppIconControllerTests {
 
         #expect(harness.log.events == ["dock:image"])
         #expect(harness.log.backgroundStyles == [.dark])
+    }
+
+    @Test func changingWiFiSymbolScaleRendersWithUpdatedScale() throws {
+        let harness = try AppIconControllerHarness(initialPlacement: .dock)
+        defer { harness.cleanUp() }
+        harness.controller.start()
+        harness.log.reset()
+
+        harness.settings.wifiSymbolScale = 1.5
+
+        #expect(harness.log.renderCount == 1)
+        #expect(harness.log.connectionOptions.last?.wifiScale == 1.5)
+    }
+
+    @Test func connectionOptionChangeKeepsConfiguredWiFiSymbolScale() throws {
+        let harness = try AppIconControllerHarness(initialPlacement: .dock)
+        defer { harness.cleanUp() }
+        harness.controller.start()
+        harness.settings.wifiSymbolScale = 1.5
+        harness.log.reset()
+
+        harness.settings.showsWiFiIconForHotspot = true
+
+        #expect(harness.log.renderCount == 1)
+        #expect(harness.log.connectionOptions.last?.wifiScale == 1.5)
+    }
+
+    @Test func changingVolumeDisplayStyleRendersWithUpdatedOptions() throws {
+        let harness = try AppIconControllerHarness(initialPlacement: .dock)
+        defer { harness.cleanUp() }
+        harness.controller.start()
+        harness.log.reset()
+
+        harness.settings.volumeDisplayStyle = .arc
+
+        #expect(harness.log.renderCount == 1)
+        #expect(harness.log.volumeOptions.last == VolumeIconOptions(displayStyle: .arc))
+    }
+
+    /// The icon size slider lives in the App Icon pane and is documented as
+    /// menu-bar only: the Dock icon keeps the fixed design size.
+    @Test func menuBarIconSizeDoesNotChangeTheDockIcon() throws {
+        let harness = try AppIconControllerHarness(initialPlacement: .dock)
+        defer { harness.cleanUp() }
+        harness.controller.start()
+        harness.log.reset()
+
+        harness.settings.iconSize = 32
+
+        #expect(harness.log.events.isEmpty)
+        #expect(harness.log.renderCount == 0)
     }
 
     @Test func reRendersWhenTheSystemIconStyleChanges() throws {
@@ -242,7 +317,8 @@ private final class AppIconControllerHarness {
         acceptsActivationPolicy: Bool = true,
         systemTheme: @escaping () -> SystemIconAppearanceTheme = { .default },
         isDarkAppearance: Bool = false,
-        notificationCenter: NotificationCenter = .default
+        notificationCenter: NotificationCenter = .default,
+        codexQuota: CodexQuotaMonitor = CodexQuotaMonitor()
     ) throws {
         suiteName = "StatusTrioCoreTests.AppIconController.\(UUID().uuidString)"
         guard let defaults = UserDefaults(suiteName: suiteName) else {
@@ -266,7 +342,8 @@ private final class AppIconControllerHarness {
             batteryMonitor: battery,
             wifiMonitor: NoopWiFiMonitor(),
             volumeMonitor: NoopVolumeMonitor(),
-            refreshInterval: .seconds(60)
+            refreshInterval: .seconds(60),
+            codexQuota: codexQuota
         )
         self.store = store
 
@@ -281,9 +358,12 @@ private final class AppIconControllerHarness {
             setMenuBarVisible: { isVisible in
                 log.events.append(isVisible ? "menu:true" : "menu:false")
             },
-            renderDockIcon: { _, _, _, backgroundStyle in
+            renderDockIcon: { status, _, connectionOptions, volumeOptions, backgroundStyle in
+                log.statuses.append(status)
                 log.renderCount += 1
                 log.backgroundStyles.append(backgroundStyle)
+                log.connectionOptions.append(connectionOptions)
+                log.volumeOptions.append(volumeOptions)
                 return NSImage(size: NSSize(width: 512, height: 512))
             },
             theme: systemTheme,
@@ -317,13 +397,19 @@ private enum AppIconHarnessError: Error {
 @MainActor
 private final class AppIconEventLog {
     var events: [String] = []
+    var statuses: [MenuBarStatus] = []
     var renderCount = 0
     var backgroundStyles: [DockIconBackgroundStyle] = []
+    var connectionOptions: [ConnectionIconOptions] = []
+    var volumeOptions: [VolumeIconOptions] = []
 
     func reset() {
+        statuses.removeAll()
         events.removeAll()
         renderCount = 0
         backgroundStyles.removeAll()
+        connectionOptions.removeAll()
+        volumeOptions.removeAll()
     }
 }
 

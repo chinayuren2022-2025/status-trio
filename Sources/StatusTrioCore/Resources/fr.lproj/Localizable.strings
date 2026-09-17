@@ -24,6 +24,7 @@
 "settings.appIconPlacement.menuBar" = "Barre des menus";
 "settings.appIconPlacement.dock" = "Dock";
 "settings.appIconPlacement.both" = "Les deux";
+"settings.appIcon.dockGroup" = "Icône du Dock";
 "settings.dockIconBackground" = "Fond de l’icône du Dock";
 "settings.dockIconBackground.description" = "S’applique à l’icône dynamique du Dock. « Suivre le système » lit « Style des icônes et widgets » dans Réglages du système › Apparence (macOS 15 ou ultérieur).";
 "settings.dockIconBackground.system" = "Suivre le système";
@@ -31,20 +32,21 @@
 "settings.dockIconBackground.light" = "Clair";
 "settings.iconSize" = "Taille de l’icône";
 "settings.iconSize.accessibilityValue" = "%d points";
-"settings.iconSize.description" = "Ajuste la taille de rendu de l’icône dans la barre des menus de 16 à 36 pt.";
+"settings.iconSize.description" = "Ajuste la taille de rendu de l’icône dans la barre des menus de 16 à 36 pt. L’icône du Dock conserve sa taille de design fixe.";
+"settings.tab.appIcon" = "Icône de l’app";
+"settings.tab.battery" = "Batterie";
+"settings.tab.network" = "Réseau";
+"settings.tab.audio" = "Audio";
 "settings.tab.basics" = "Général";
 "settings.tab.panel" = "Panneau d’état";
-"settings.tab.menuBar" = "Barre des menus";
-"settings.tab.audio" = "Audio";
-"settings.tab.battery" = "Batterie";
 "settings.tab.about" = "À propos";
 "settings.menuBar.title" = "Icône de la barre des menus";
-"settings.menuBar.connectionIcons" = "Style des icônes de connexion";
-"settings.menuBar.connectionIcons.description" = "Lorsque cette option est activée, l’état sélectionné utilise l’icône de signal Wi-Fi standard au lieu de son symbole spécifique.";
-"settings.menuBar.wifiIconForEthernet" = "Utiliser l’icône Wi-Fi pour Ethernet";
-"settings.menuBar.wifiIconForHotspot" = "Utiliser l’icône Wi-Fi pour le partage de connexion";
-"settings.menuBar.wifiIconForTemporaryConnection" = "Utiliser l’icône Wi-Fi pour une connexion temporaire";
-"settings.menuBar.wifiIconForInternetSharing" = "Utiliser l’icône Wi-Fi pour le partage Internet";
+"settings.network.connectionIcons" = "Style des icônes de connexion";
+"settings.network.connectionIcons.description" = "Lorsque cette option est activée, l’état sélectionné utilise l’icône de signal Wi-Fi standard au lieu de son symbole spécifique.";
+"settings.network.wifiIconForEthernet" = "Utiliser l’icône Wi-Fi pour Ethernet";
+"settings.network.wifiIconForHotspot" = "Utiliser l’icône Wi-Fi pour le partage de connexion";
+"settings.network.wifiIconForTemporaryConnection" = "Utiliser l’icône Wi-Fi pour une connexion temporaire";
+"settings.network.wifiIconForInternetSharing" = "Utiliser l’icône Wi-Fi pour le partage Internet";
 "settings.audio.maximumVisible" = "Nombre maximal d’appareils visibles";
 "settings.audio.maximumVisibleDescription" = "Nombre d’appareils affichés avant le bouton Développer.";
 "settings.audio.showAll" = "Toujours afficher tous les appareils";
@@ -63,8 +65,10 @@
 "settings.about.copyright" = "© lingyired";
 "settings.battery.title" = "Affichage de la batterie";
 "settings.battery.showPercentage" = "Afficher le pourcentage de batterie";
-"settings.battery.showChargingIndicator" = "Afficher l’éclair pendant la charge ou sur secteur";
-"settings.battery.chargingDescription" = "Lorsque cette option est activée, le pourcentage devient un éclair pendant la charge ou sur secteur.";
+"settings.battery.showChargingIndicator" = "Afficher un indicateur pendant la charge ou sur secteur";
+"settings.battery.chargingDescription" = "Lorsque cette option est activée, le pourcentage devient un éclair ou une prise pendant la charge ou sur secteur.";
+"settings.battery.percentageWhenConnected" = "Afficher le pourcentage sur secteur sans charge";
+"settings.battery.percentageWhenConnectedDescription" = "Lorsque cette option est activée, une source secteur qui ne charge pas affiche le pourcentage à la place de la prise.";
 "settings.battery.symbolScale" = "Taille du pourcentage/de l’éclair";
 "settings.battery.symbolScaleAccessibility" = "Taille du pourcentage et de l’éclair";
 "settings.battery.symbolScaleDescription" = "Le pourcentage et l’éclair utilisent la même taille.";
@@ -90,7 +94,6 @@
 "common.parenthetical" = "%@ (%@)";
 "common.labelValue" = "%@, %@";
 "wifi.title" = "Wi-Fi";
-"network.title" = "Réseau";
 "wifi.value.bars" = "%d barres";
 "wifi.value.notAssociated" = "Non associé";
 "wifi.value.off" = "Désactivé";
@@ -137,6 +140,19 @@
 "settings.popup.order.description" = "Choisissez les éléments affichés dans le panneau d’état, puis faites-les glisser pour modifier leur ordre.";
 "settings.popup.order.battery" = "Batterie";
 "settings.popup.order.volume" = "Volume";
+"settings.popup.volumeScroll.group" = "Défilement du panneau";
+"settings.popup.volumeScroll" = "Régler le volume en défilant";
+"settings.popup.volumeScroll.description" = "Faites défiler dans le panneau d’état pour changer le volume de sortie.";
+"settings.popup.volumeScroll.scope" = "Zone";
+"settings.popup.volumeScroll.scope.description" = "Choisissez la zone où le défilement modifie le volume.";
+"settings.popup.volumeScroll.scope.panel" = "Tout le panneau";
+"settings.popup.volumeScroll.scope.volumeControl" = "Réglage du volume uniquement";
+"settings.popup.volumeScroll.natural" = "Défilement naturel";
+"settings.popup.volumeScroll.natural.description" = "Lorsque cette option est activée, un défilement vers le haut avec la souris ou le trackpad augmente le volume. Sinon, le volume suit le sens de défilement du système. Si, après avoir activé cette option, le défilement vers le haut de la souris fait encore baisser le volume, configurez MOS, Scroll Reverser, LinearMouse ou une app similaire pour laisser Status Trio inchangé, généralement via une liste d’exceptions/d’ignorés (parfois appelée liste d’autorisation).";
+"settings.popup.volumeScroll.direction" = "Sens du défilement";
+"settings.popup.volumeScroll.direction.description" = "Choisissez le sens qui augmente le volume.";
+"settings.popup.volumeScroll.direction.up" = "Vers le haut";
+"settings.popup.volumeScroll.direction.down" = "Vers le bas";
 
 "common.back" = "Back";
 "common.cancel" = "Cancel";
@@ -213,7 +229,7 @@
 "bluetooth.authorizationDenied" = "Bluetooth permission is denied. Open Bluetooth Settings.";
 "bluetooth.authorizationRestricted" = "Bluetooth permission is restricted.";
 
-"settings.preview.hint" = "Aperçu en direct de la barre des menus · Ajustez les paramètres ci-dessous pour voir les changements immédiatement";
+"settings.preview.hint" = "Aperçu en direct · Ajustez les paramètres ci-dessous pour voir les changements immédiatement";
 "settings.preview.dark" = "Fond sombre";
 "settings.preview.light" = "Fond clair";
 "settings.preview.toggleHelp" = "Basculer l'aperçu de la barre des menus en sombre/clair";
@@ -238,3 +254,14 @@
 "codex.codexUnsupported" = "Ce compte ne fournit pas de périodes de quota compatibles.";
 "codex.codexAccountChanged" = "Le compte Codex a changé. Actualisez les données.";
 "codex.codexHint" = "Facultatif : lit la connexion Codex locale (CODEX_HOME/auth.json ou ~/.codex/auth.json) et envoie le jeton uniquement à chatgpt.com pour vérifier le quota chaque minute. Aucun identifiant n’est enregistré ou modifié. Les points creux indiquent un état inconnu ; davantage de points allumés signifie davantage de quota restant.";
+
+"settings.wifi.symbolScale" = "Taille de l'icône Wi-Fi";
+"settings.wifi.symbolScaleDescription" = "Ajuste l’échelle de l’icône Wi-Fi dans l’anneau de statut de 100 % à 180 %.";
+"settings.audio.indicatorStyleTitle" = "Style de l'indicateur de volume";
+"settings.audio.indicatorStyle" = "Style d'affichage";
+"settings.audio.indicatorStyleDescription" = "Choisissez d'afficher le volume sous forme de quatre points ou d'un arc continu.";
+"settings.audio.indicatorStyle.dots" = "Points";
+"settings.audio.indicatorStyle.arc" = "Arc";
+
+/* Compact popover controls. */
+"menu.more" = "Autres actions";

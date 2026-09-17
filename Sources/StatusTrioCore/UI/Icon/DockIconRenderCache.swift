@@ -3,26 +3,32 @@
 /// inside the same dot count) does not trigger another render.
 struct DockIconRenderKey: Equatable, Hashable {
     let batteryPercentage: Int
-    let showsChargingBolt: Bool
+    let gapContent: BatteryGapContent
     let batteryColorRole: BatteryColorRole
     let connection: NetworkConnection
     let wifiState: WiFiState
     let wifiBars: Int
+    let usesCodexQuota: Bool
+    let codexDotCount: Int?
     let volumeSteps: Int
     let options: BatteryIconOptions
     let connectionOptions: ConnectionIconOptions
+    let volumeOptions: VolumeIconOptions
+    let volumeArcProgress: Double?
     let backgroundStyle: DockIconBackgroundStyle
 
     init(
         status: MenuBarStatus,
         options: BatteryIconOptions,
         connectionOptions: ConnectionIconOptions,
+        volumeOptions: VolumeIconOptions = .standard,
         backgroundStyle: DockIconBackgroundStyle
     ) {
         self.batteryPercentage = status.battery.percentage
-        self.showsChargingBolt = status.battery.isPresent
-            && (status.battery.isCharging || status.battery.isConnectedToPower)
-            && options.showsChargingIndicator
+        self.gapContent = StatusMappings.batteryGapContent(
+            status.battery,
+            options: options
+        )
         self.batteryColorRole = options.usesStatusColors
             ? StatusMappings.batteryColorRole(
                 status.battery,
@@ -32,13 +38,24 @@ struct DockIconRenderKey: Equatable, Hashable {
         self.connection = status.connection
         self.wifiState = status.wifi.state
         self.wifiBars = StatusMappings.wifiBars(rssi: status.wifi.rssi)
-        self.volumeSteps = StatusMappings.volumeSteps(
+        self.usesCodexQuota = status.codexIndicator != nil
+        self.codexDotCount = status.codexIndicator?.dotCount
+        self.volumeSteps = usesCodexQuota ? 0 : StatusMappings.volumeSteps(
             scalar: status.volume.scalar,
             isMuted: status.volume.isMuted
         ) ?? 0
         self.options = options
         self.connectionOptions = connectionOptions
+        self.volumeOptions = usesCodexQuota ? .standard : volumeOptions
+        self.volumeArcProgress = !usesCodexQuota && volumeOptions.displayStyle == .arc
+            ? status.volume.scalar.flatMap(Self.clampedVolume)
+            : nil
         self.backgroundStyle = backgroundStyle
+    }
+
+    private static func clampedVolume(_ scalar: Double) -> Double? {
+        guard scalar.isFinite else { return nil }
+        return min(1, max(0, scalar))
     }
 }
 
