@@ -121,6 +121,7 @@ struct AppIconControllerTests {
         let harness = try AppIconControllerHarness(initialPlacement: .dock, codexQuota: monitor)
         defer { harness.cleanUp() }
         harness.controller.start()
+        let volumeImage = try #require(harness.application.applicationIconImage)
         harness.settings.bottomIndicatorMode = .codexWeekly
         monitor.setMode(.codexWeekly)
         for _ in 0..<50 {
@@ -128,12 +129,14 @@ struct AppIconControllerTests {
             try await Task.sleep(for: .milliseconds(10))
         }
         #expect(harness.log.statuses.last?.codexIndicator?.remainingPercent == 37)
+        #expect(harness.application.applicationIconImage !== volumeImage)
         harness.settings.bottomIndicatorMode = .volume
         for _ in 0..<50 {
-            if harness.log.statuses.last?.codexIndicator == nil { break }
+            if harness.application.applicationIconImage === volumeImage { break }
             try await Task.sleep(for: .milliseconds(10))
         }
-        #expect(harness.log.statuses.last?.codexIndicator == nil)
+        // Returning to volume reuses the cached image without invoking the renderer.
+        #expect(harness.application.applicationIconImage === volumeImage)
     }
 
     @Test func changingBackgroundPreferenceRendersAgain() throws {
